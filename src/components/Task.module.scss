@@ -4,6 +4,9 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  &:hover {
+    cursor: pointer;
+  }
 }
 
 .progress-container {
@@ -18,6 +21,28 @@
   justify-content: center;
 }
 
+.icon {
+  font-size: 5rem;
+}
+
+.count {
+  color: $secondary-theme;
+  position: absolute;
+  margin-top: 100px;
+  user-select: none;
+}
+
 .task-name {
   text-transform: uppercase;
+}
+
+.task-complete {
+  background-color: white;
+  border-color: white;
+  .icon {
+    color: black;
+  }
+  .count {
+    color: $primary-theme;
+  }
 }

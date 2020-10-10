@@ -1,0 +1,28 @@
+@import "../variables.scss";
+.container {
+  display: flex;
+  flex-direction: column;
+  border-radius: 4px;
+  header {
+    background-color: $primary-theme-darker;
+    border-radius: 4px 4px 0px 0px;
+  }
+  h2 {
+    text-align: center;
+    margin: 0.8rem;
+    font-size: 1.5rem;
+  }
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  font-weight: normal;
+  font-family: Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue",
+    sans-serif;
+  font-size: 0.8rem;
+
+  label {
+    text-transform: uppercase;
+  }
+}
