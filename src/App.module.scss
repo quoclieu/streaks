@@ -19,3 +19,16 @@ main {
   justify-content: center;
   align-items: center;
 }
+
+::-webkit-input-placeholder {
+  /* Edge */
+  color: lightgray;
+}
+
+:-ms-input-placeholder {
+  /* Internet Explorer 10-11 */
+  color: lightgray;
+}
+::placeholder {
+  color: lightgray;
+}

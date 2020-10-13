@@ -2,10 +2,33 @@
 .container {
   display: flex;
   flex-direction: column;
-  border-radius: 4px;
+  border-radius: 10px;
+  position: absolute;
+  background-color: $primary-theme;
+  margin-top: 20%;
   header {
     background-color: $primary-theme-darker;
-    border-radius: 4px 4px 0px 0px;
+    border-radius: 10px 10px 0px 0px;
+    border: 1px solid $primary-theme-border-clr;
+    height: 52px;
+    .button-container {
+      position: absolute;
+      height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-sizing: border-box;
+      margin-left: 1rem;
+    }
+    button {
+      border: none;
+      background-color: transparent;
+      color: white;
+      font-size: 1.2rem;
+      &:hover {
+        cursor: pointer;
+      }
+    }
   }
   h2 {
     text-align: center;
@@ -20,9 +43,79 @@
   font-weight: normal;
   font-family: Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue",
     sans-serif;
-  font-size: 0.8rem;
+  font-size: 1rem;
+
+  .sub-text {
+    padding: 0.5rem 1.5rem 0.5rem 1.5rem;
+  }
 
   label {
     text-transform: uppercase;
+  }
+  input {
+    border: 1px solid $primary-theme-border-clr;
+    background-color: $primary-theme-darker;
+    font-family: $roboto-font;
+    font-weight: bold;
+    font-size: 1.2rem;
+    color: white;
+    padding: 1rem 1.5rem;
+    &:focus {
+      outline: 2px solid white;
+    }
+  }
+  button[type="submit"] {
+    margin-top: 2rem;
+    text-transform: uppercase;
+    font-family: $roboto-font;
+    font-weight: bold;
+    color: white;
+    border: none;
+    background-color: $secondary-theme;
+    border-radius: 10px;
+    padding: 0.5rem;
+    font-size: 1.5rem;
+    border: 1px solid $primary-theme-border-clr;
+    &:disabled {
+      background-color: $primary-theme-darker;
+      color: lightgray;
+      cursor: not-allowed;
+    }
+  }
+}
+
+.check-icon-container {
+  display: flex;
+  justify-content: center;
+  margin: 1rem 0;
+}
+
+.check-icon {
+  color: black;
+  background-color: white;
+  padding: 0.5rem;
+  border-radius: 50%;
+  font-size: 2.5rem;
+}
+
+.icon-selection-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+
+  .icon {
+    color: white;
+    background-color: $primary-theme-border-clr;
+    padding: 0.5rem;
+    border-radius: 50%;
+    font-size: 2.5rem;
+    &.selected {
+      background-color: white;
+      color: black;
+    }
+    &:hover {
+      cursor: pointer;
+    }
   }
 }

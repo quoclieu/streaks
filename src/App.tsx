@@ -23,7 +23,7 @@ const data = [
 ];
 
 function App() {
-  const [addTask, setAddTask] = useState(false);
+  const [showAddTaskForm, setShowAddTaskForm] = useState(true);
   const [tasks, setNewTasks] = useState<Array<Task>>(data);
 
   const handleTaskClick = (task: Task, index: number) => {
@@ -79,10 +79,16 @@ function App() {
             icon="fa-solid:plus"
             count={null}
             isComplete={false}
-            onClick={() => setAddTask(true)}
+            onClick={() => setShowAddTaskForm(true)}
           />
         </section>
-        {addTask ? <AddTaskForm /> : null}
+        {showAddTaskForm ? (
+          <AddTaskForm
+            onClose={() => {
+              setShowAddTaskForm(false);
+            }}
+          />
+        ) : null}
       </main>
     </>
   );
