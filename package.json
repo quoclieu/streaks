@@ -2,6 +2,7 @@
   "name": "streaks",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://quoclieu.github.io/streaks",
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
@@ -25,7 +26,9 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "analyze": "source-map-explorer 'build/static/js/*.js'"
+    "analyze": "source-map-explorer 'build/static/js/*.js'",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -48,6 +51,7 @@
     "@iconify/icons-gg": "^1.0.0",
     "@iconify/icons-mdi": "^1.0.144",
     "@iconify/icons-ri": "^1.0.1",
-    "@iconify/react": "^1.1.3"
+    "@iconify/react": "^1.1.3",
+    "gh-pages": "^3.1.0"
   }
 }
