@@ -1,29 +1,31 @@
+import plusIcon from "@iconify/icons-fa-solid/plus";
 import produce from "immer";
 import React, { useState } from "react";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import styles from "./App.module.scss";
 import { AddTaskForm } from "./components/AddTaskForm";
 import { Task } from "./components/Task";
+import { IconEnum } from "./components/TaskIcon";
 
 type Task = {
   id: string;
   name: string;
-  icon: string;
+  iconEnum: IconEnum;
   count: number;
   isComplete: boolean;
 };
 
-const data = [
+const data: Array<Task> = [
   {
     id: "1",
     name: "meditate",
-    icon: "mdi:meditation",
+    iconEnum: IconEnum.Meditation,
     count: 0,
     isComplete: false,
   },
 ];
 
 function App() {
-  const [showAddTaskForm, setShowAddTaskForm] = useState(true);
   const [tasks, setNewTasks] = useState<Array<Task>>(data);
 
   const handleTaskClick = (task: Task, index: number) => {
@@ -58,37 +60,60 @@ function App() {
         <h1>STREAKS</h1>
       </div>
       <main>
-        <section className={styles["tasks-container"]}>
-          {tasks.map((task, index) => {
-            return (
-              <Task
-                key={task.id}
-                id={task.id}
-                name={task.name}
-                icon={task.icon}
-                count={task.count}
-                isComplete={task.isComplete}
-                onClick={() => {
-                  handleTaskClick(task, index);
-                }}
-              />
-            );
-          })}
-          <Task
-            name="Add a task"
-            icon="fa-solid:plus"
-            count={null}
-            isComplete={false}
-            onClick={() => setShowAddTaskForm(true)}
-          />
-        </section>
-        {showAddTaskForm ? (
-          <AddTaskForm
-            onClose={() => {
-              setShowAddTaskForm(false);
-            }}
-          />
-        ) : null}
+        <Router>
+          <Switch>
+            <Route path={`/add-task`}>
+              {(routeProps) => (
+                <AddTaskForm
+                  onClose={() => {
+                    routeProps.history.push("/");
+                  }}
+                  onSave={(iconEnum, title) => {
+                    setNewTasks([
+                      ...tasks,
+                      {
+                        name: title,
+                        iconEnum,
+                        count: 0,
+                        isComplete: false,
+                        id: new Date().toDateString(),
+                      },
+                    ]);
+                  }}
+                />
+              )}
+            </Route>
+            <Route>
+              {(routeProps) => (
+                <section className={styles["tasks-container"]}>
+                  {tasks.map((task, index) => {
+                    return (
+                      <Task
+                        key={task.id}
+                        name={task.name}
+                        iconEnum={task.iconEnum}
+                        count={task.count}
+                        isComplete={task.isComplete}
+                        onClick={() => {
+                          handleTaskClick(task, index);
+                        }}
+                      />
+                    );
+                  })}
+                  <Task
+                    name="Add a task"
+                    icon={plusIcon}
+                    count={null}
+                    isComplete={false}
+                    onClick={() => {
+                      routeProps.history.push(`/add-task`);
+                    }}
+                  />
+                </section>
+              )}
+            </Route>
+          </Switch>
+        </Router>
       </main>
     </>
   );

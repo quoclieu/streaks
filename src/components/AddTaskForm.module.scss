@@ -3,13 +3,10 @@
   display: flex;
   flex-direction: column;
   border-radius: 10px;
-  position: absolute;
   background-color: $primary-theme;
-  margin-top: 20%;
+  border: 8px solid $primary-theme-border-clr;
   header {
     background-color: $primary-theme-darker;
-    border-radius: 10px 10px 0px 0px;
-    border: 1px solid $primary-theme-border-clr;
     height: 52px;
     .button-container {
       position: absolute;
@@ -19,12 +16,6 @@
       justify-content: center;
       box-sizing: border-box;
       margin-left: 1rem;
-    }
-    button {
-      border: none;
-      background-color: transparent;
-      color: white;
-      font-size: 1.2rem;
       &:hover {
         cursor: pointer;
       }
@@ -38,6 +29,7 @@
 }
 
 .form {
+  padding: 1rem;
   display: flex;
   flex-direction: column;
   font-weight: normal;
@@ -76,6 +68,9 @@
     padding: 0.5rem;
     font-size: 1.5rem;
     border: 1px solid $primary-theme-border-clr;
+    &:hover {
+      cursor: pointer;
+    }
     &:disabled {
       background-color: $primary-theme-darker;
       color: lightgray;
@@ -84,18 +79,23 @@
   }
 }
 
-.check-icon-container {
+.title-container {
+  display: flex;
+  justify-content: center;
+}
+
+.selected-icon-container {
   display: flex;
   justify-content: center;
   margin: 1rem 0;
 }
 
-.check-icon {
+.selected-icon {
   color: black;
   background-color: white;
   padding: 0.5rem;
   border-radius: 50%;
-  font-size: 2.5rem;
+  font-size: 5rem;
 }
 
 .icon-selection-container {

@@ -1,17 +1,19 @@
+import Icon from "@iconify/react";
 import React, { FunctionComponent } from "react";
 import styles from "./Task.module.scss";
+import { IconEnum, TaskIcon } from "./TaskIcon";
 
 interface Props {
-  id?: string;
   name: string;
   count: number | null;
-  icon: string;
+  iconEnum?: IconEnum;
+  icon?: object;
   isComplete: boolean;
   onClick: (event: React.MouseEvent<HTMLElement>) => void;
 }
 
 export const Task: FunctionComponent<Props> = ({
-  id,
+  iconEnum,
   icon,
   name,
   count,
@@ -26,11 +28,13 @@ export const Task: FunctionComponent<Props> = ({
         }`}
         onClick={onClick}
       >
-        <span
-          className={`iconify ${styles["icon"]}`}
-          data-icon={icon}
-          data-inline="false"
-        />
+        {icon !== undefined ? (
+          <Icon icon={icon} className={styles["icon"]} />
+        ) : null}
+
+        {iconEnum !== undefined ? (
+          <TaskIcon className={styles["icon"]} iconEnum={iconEnum} />
+        ) : null}
 
         <div className={styles["count"]}>{count}</div>
       </div>
