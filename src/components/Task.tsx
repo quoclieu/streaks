@@ -28,14 +28,15 @@ export const Task: FunctionComponent<Props> = ({
         }`}
         onClick={onClick}
       >
-        {icon !== undefined ? (
-          <Icon icon={icon} className={styles["icon"]} />
-        ) : null}
+        <div>
+          {icon !== undefined ? (
+            <Icon icon={icon} className={styles["icon"]} />
+          ) : null}
 
-        {iconEnum !== undefined ? (
-          <TaskIcon className={styles["icon"]} iconEnum={iconEnum} />
-        ) : null}
-
+          {iconEnum !== undefined ? (
+            <TaskIcon className={styles["icon"]} iconEnum={iconEnum} />
+          ) : null}
+        </div>
         <div className={styles["count"]}>{count}</div>
       </div>
       <div className={styles["task-name"]}>{name}</div>

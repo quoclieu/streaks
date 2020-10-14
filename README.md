@@ -5,6 +5,8 @@
 Screenshot:
 ![Alt text](./screenshot.png?raw=true "screen shot")
 
+Check it out here: https://quoclieu.github.io/streaks
+
 This project is not affiliated with the official iOS Streaks app. I enjoyed using the the official app daily so decided to build a web app clone of it for fun.
 
 Built using React.
