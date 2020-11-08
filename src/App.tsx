@@ -170,9 +170,8 @@ function App() {
                 <section className={styles["tasks-container"]}>
                   {tasks.map((task, index) => {
                     return (
-                      <div>
+                      <div key={index}>
                         <Task
-                          key={task.id}
                           name={task.name}
                           iconEnum={task.iconEnum}
                           count={task.count}
@@ -182,13 +181,15 @@ function App() {
                           }}
                         />
                         {showDelete ? (
-                          <button
-                            className={styles["delete-btn"]}
-                            aria-label="delete"
-                            onClick={() => handleDelete(index)}
-                          >
-                            <Icon icon={roundDeleteForever} />
-                          </button>
+                          <div className={styles["delete-btn-container"]}>
+                            <button
+                              className={styles["delete-btn"]}
+                              aria-label="delete"
+                              onClick={() => handleDelete(index)}
+                            >
+                              <Icon icon={roundDeleteForever} />
+                            </button>
+                          </div>
                         ) : null}
                       </div>
                     );

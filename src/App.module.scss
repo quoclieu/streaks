@@ -22,6 +22,15 @@ main {
   align-items: center;
 }
 
+.delete-btn-container {
+  display: flex;
+  justify-content: flex-end;
+  top: -71px;
+  right: 5%;
+  height: 0;
+  position: relative;
+}
+
 .delete-btn {
   background-color: white;
   border: 2px solid $primary-theme-border-clr;
@@ -30,9 +39,7 @@ main {
   border-radius: 50%;
   height: 45px;
   width: 45px;
-  position: absolute;
-  margin-top: -70px;
-  margin-left: 120px;
+
   svg {
     margin-top: 6px;
   }
