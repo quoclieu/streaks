@@ -9,8 +9,9 @@
 .tasks-container {
   margin-top: 4rem;
   display: grid;
-  row-gap: 2rem;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  // column-gap: 30px;
+  row-gap: 4rem;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   width: 600px;
 }
 

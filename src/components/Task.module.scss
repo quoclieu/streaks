@@ -4,21 +4,20 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  &:hover {
-    cursor: pointer;
-  }
 }
 
 .progress-container {
   height: 140px;
   width: 140px;
-  border: 10px solid $secondary-theme;
   border-radius: 50%;
   margin-bottom: 0.5rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  &:hover {
+    cursor: pointer;
+  }
 }
 
 .icon {
@@ -28,17 +27,18 @@
 .count {
   color: $secondary-theme;
   position: absolute;
-  padding-top: 100px;
+  padding-top: 90px;
   user-select: none;
 }
 
 .task-name {
+  margin-top: 14px;
   text-transform: uppercase;
 }
 
 .task-complete {
-  background-color: white;
-  border-color: white;
+  // background-color: white;
+  // border-color: white;
   .icon {
     color: black;
   }
