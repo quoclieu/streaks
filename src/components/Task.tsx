@@ -1,5 +1,5 @@
 import Icon from "@iconify/react";
-import React, { FunctionComponent, useState } from "react";
+import React, { FunctionComponent, useEffect, useState } from "react";
 import {
   buildStyles,
   CircularProgressbarWithChildren,
@@ -27,9 +27,8 @@ export const Task: FunctionComponent<Props> = ({
 }) => {
   const [showComplete, setShowComplete] = useState(isComplete);
 
-  const handleOnClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    onClick(e);
-    if (!isComplete) {
+  useEffect(() => {
+    if (isComplete) {
       // buffer the completed styles so the progress bar completes its animation first
       setTimeout(() => {
         setShowComplete(true);
@@ -37,7 +36,7 @@ export const Task: FunctionComponent<Props> = ({
     } else {
       setShowComplete(false);
     }
-  };
+  }, [isComplete]);
 
   return (
     <>
@@ -46,7 +45,7 @@ export const Task: FunctionComponent<Props> = ({
           className={`${styles["progress-container"]} ${
             showComplete ? styles["task-complete"] : ""
           }`}
-          onClick={handleOnClick}
+          onClick={onClick}
         >
           <CircularProgressbarWithChildren
             value={isComplete ? 100 : 0}

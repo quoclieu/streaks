@@ -1,4 +1,7 @@
 import plusIcon from "@iconify/icons-fa-solid/plus";
+import baselineSettings from "@iconify/icons-ic/baseline-settings";
+import roundDeleteForever from "@iconify/icons-ic/round-delete-forever";
+import { Icon } from "@iconify/react";
 import format from "date-fns/format";
 import sub from "date-fns/sub";
 import firebase from "firebase";
@@ -8,6 +11,7 @@ import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import styles from "./App.module.scss";
 import { AddTaskForm } from "./components/AddTaskForm";
+import { DatePicker } from "./components/DatePicker";
 import { Task } from "./components/Task";
 import { db } from "./services/firebase-config";
 import { replacePropertyValuesInTasks } from "./utils/replacePropertyValuesInTasks";
@@ -16,11 +20,12 @@ import { Task as TaskType } from "./utils/types";
 const DATE_FORMAT = "dd-MM-yy";
 
 function App() {
-  const [tasks, setNewTasks] = useState<Array<TaskType>>([]);
+  const [tasks, setNextTasksState] = useState<Array<TaskType>>([]);
   const [dbRef, setDbRef] = useState<firebase.database.Reference | null>(null);
   const [ipAddress, setIpAddress] = useState("");
   const [loading, setLoading] = useState(false);
-  const [targetDate, setNewTargetDate] = useState(new Date());
+  const [targetDate, setTargetDate] = useState(new Date());
+  const [showDelete, setShowDelete] = useState(false);
 
   // load db ref according to user ip address
   useEffect(() => {
@@ -46,21 +51,21 @@ function App() {
 
         if (currentDate in data) {
           // if today exists in the db, load the data into state.
-          setNewTasks(data[currentDate].tasks);
+          setNextTasksState(data[currentDate].tasks);
         } else if (previousDate in data) {
           // else load yesterday if it exists and clear all completes
-          setNewTasks(
+          setNextTasksState(
             replacePropertyValuesInTasks(data[previousDate].tasks, {
               isCompleteToday: false,
             })
           );
         } else {
-          // else load last date but clear all counts and completes
-          if (Object.keys(data).length < 1) return;
-          else {
+          if (Object.keys(data).length < 1) {
+            setNextTasksState([]);
+          } else {
             const lastestDate =
               data[Object.keys(data)[Object.keys(data).length - 1]];
-            setNewTasks(
+            setNextTasksState(
               replacePropertyValuesInTasks(lastestDate.tasks, {
                 isCompleteToday: false,
                 count: 0,
@@ -75,49 +80,65 @@ function App() {
   }, [dbRef, targetDate]);
 
   // update db when local state updates
-  useEffect(() => {
-    if (!ipAddress) return;
-    if (tasks.length === 0) return;
+  const updateDbWithTasks = (newTasks: Array<TaskType>) => {
     db()
       .ref(ipAddress)
       .child(format(targetDate, DATE_FORMAT))
       .child("tasks")
-      .set(tasks);
-  }, [ipAddress, targetDate, tasks]);
+      .set(newTasks);
+  };
 
   const handleTaskClick = (task: TaskType, index: number) => {
+    setShowDelete(false);
+    let nextTasksState = tasks;
     if (!task.isCompleteToday) {
-      setNewTasks((prevTasks) => {
-        return produce(prevTasks, (newTasks) => {
-          newTasks[index] = {
-            ...newTasks[index],
-            isCompleteToday: true,
-            count: newTasks[index].count += 1,
-          };
-          return newTasks;
-        });
+      nextTasksState = produce(tasks, (newTasks) => {
+        newTasks[index] = {
+          ...newTasks[index],
+          isCompleteToday: true,
+          count: newTasks[index].count += 1,
+        };
+        return newTasks;
       });
     } else {
-      setNewTasks((prevTasks) => {
-        return produce(prevTasks, (newTasks) => {
-          newTasks[index] = {
-            ...newTasks[index],
-            isCompleteToday: false,
-            count: newTasks[index].count -= 1,
-          };
-          return newTasks;
-        });
+      nextTasksState = produce(tasks, (newTasks) => {
+        newTasks[index] = {
+          ...newTasks[index],
+          isCompleteToday: false,
+          count: newTasks[index].count -= 1,
+        };
+        return newTasks;
       });
     }
+    setNextTasksState(nextTasksState);
+    updateDbWithTasks(nextTasksState);
+  };
+
+  const handleDelete = (index: number) => {
+    const newState = produce(tasks, (newState) => {
+      newState.splice(index, 1);
+      return newState;
+    });
+
+    setNextTasksState(newState);
+    updateDbWithTasks(newState);
   };
 
   if (dbRef === null || loading) return null;
 
   return (
     <>
-      <div className={styles.heading}>
+      <button
+        aria-label="settings"
+        className={styles["settings-btn"]}
+        onClick={() => setShowDelete(!showDelete)}
+      >
+        <Icon icon={baselineSettings} />
+      </button>
+      <header className={styles.heading}>
         <h1>STREAKS</h1>
-      </div>
+        <DatePicker selected={targetDate} onChange={setTargetDate} />
+      </header>
       <main>
         <Router>
           <Switch>
@@ -128,7 +149,7 @@ function App() {
                     routeProps.history.push("/");
                   }}
                   onSave={(iconEnum, title) => {
-                    setNewTasks([
+                    const nextTasksState = [
                       ...tasks,
                       {
                         name: title,
@@ -137,7 +158,9 @@ function App() {
                         isCompleteToday: false,
                         id: new Date().toString(),
                       },
-                    ]);
+                    ];
+                    setNextTasksState(nextTasksState);
+                    updateDbWithTasks(nextTasksState);
                   }}
                 />
               )}
@@ -147,16 +170,27 @@ function App() {
                 <section className={styles["tasks-container"]}>
                   {tasks.map((task, index) => {
                     return (
-                      <Task
-                        key={task.id}
-                        name={task.name}
-                        iconEnum={task.iconEnum}
-                        count={task.count}
-                        isComplete={task.isCompleteToday}
-                        onClick={() => {
-                          handleTaskClick(task, index);
-                        }}
-                      />
+                      <div>
+                        <Task
+                          key={task.id}
+                          name={task.name}
+                          iconEnum={task.iconEnum}
+                          count={task.count}
+                          isComplete={task.isCompleteToday}
+                          onClick={() => {
+                            handleTaskClick(task, index);
+                          }}
+                        />
+                        {showDelete ? (
+                          <button
+                            className={styles["delete-btn"]}
+                            aria-label="delete"
+                            onClick={() => handleDelete(index)}
+                          >
+                            <Icon icon={roundDeleteForever} />
+                          </button>
+                        ) : null}
+                      </div>
                     );
                   })}
                   {tasks.length < 6 ? (
